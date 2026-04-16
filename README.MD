@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo/key_hunter_logo.svg" alt="Keychase Logo" width="280"/>
+  <img src="logo/keychase_logo_dark.svg" alt="Keychase Logo" width="280"/>
 </p>
 
 <h1 align="center">Keychase</h1>
