@@ -11,6 +11,7 @@
 <p align="center">
   <a href="https://pypi.org/project/keychase/"><img src="https://img.shields.io/pypi/v/keychase?color=blue" alt="PyPI"></a>
   <a href="https://pypi.org/project/keychase/"><img src="https://img.shields.io/pypi/pyversions/keychase" alt="Python Versions"></a>
+
   <a href="LICENSE"><img src="https://img.shields.io/github/license/Iflal/keychase" alt="License"></a>
 </p>
 
