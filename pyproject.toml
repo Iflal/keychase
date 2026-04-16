@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "keychase"
+version = "0.1.0"
+description = "A fast, flexible, and zero-config Git and filesystem secret scanner."
+readme = "README.MD"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Iflal"},
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+]
+dependencies = [
+    "requests>=2.31.0",
+    "typer>=0.9.0",
+    "rich>=13.7.0",
+    "gitpython>=3.1.40",
+    "pathspec>=0.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.3.0",
+]
+
+[project.scripts]
+keychase = "keychase.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["keychase"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --cov=keychase --cov-report=term-missing"
