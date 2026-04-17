@@ -97,17 +97,17 @@ Scan Options:
 
 Keychase ships with **78 detectors** across 9 categories:
 
-| Category | Examples | Count |
-|---|---|---|
-| **AWS** | Access Key ID, Secret Key, MWS Key, Session Token | 5 |
-| **GCP** | API Key, Service Account JSON, OAuth Secrets, Firebase | 5 |
-| **GitHub** | PAT (classic + fine-grained), OAuth, Server Tokens | 7 |
-| **Cloud Providers** | Azure, DigitalOcean, Heroku, Alibaba | 9 |
-| **Payments** | Stripe, PayPal, Square, Shopify | 12 |
-| **Messaging** | Slack, Discord, Twilio, SendGrid, Mailgun, Telegram | 12 |
-| **AI/ML** | OpenAI, Anthropic, Hugging Face, Cohere, Replicate, Gemini, Pinecone | 8 |
-| **Databases** | MongoDB, PostgreSQL, MySQL, Redis, JDBC | 6 |
-| **Generic** | Passwords, Tokens, Private Keys, Bearer Auth, URLs with creds | 14 |
+| Category                  | Examples                                                             | Count |
+| ------------------------- | -------------------------------------------------------------------- | ----- |
+| **AWS**             | Access Key ID, Secret Key, MWS Key, Session Token                    | 5     |
+| **GCP**             | API Key, Service Account JSON, OAuth Secrets, Firebase               | 5     |
+| **GitHub**          | PAT (classic + fine-grained), OAuth, Server Tokens                   | 7     |
+| **Cloud Providers** | Azure, DigitalOcean, Heroku, Alibaba                                 | 9     |
+| **Payments**        | Stripe, PayPal, Square, Shopify                                      | 12    |
+| **Messaging**       | Slack, Discord, Twilio, SendGrid, Mailgun, Telegram                  | 12    |
+| **AI/ML**           | OpenAI, Anthropic, Hugging Face, Cohere, Replicate, Gemini, Pinecone | 8     |
+| **Databases**       | MongoDB, PostgreSQL, MySQL, Redis, JDBC                              | 6     |
+| **Generic**         | Passwords, Tokens, Private Keys, Bearer Auth, URLs with creds        | 14    |
 
 List all detectors:
 ```bash
@@ -161,10 +161,10 @@ legacy_config.py
 
 ### Exit Codes
 
-| Code | Meaning |
-|---|---|
-| `0` | No secrets found |
-| `1` | Secrets detected |
+| Code  | Meaning                     |
+| ----- | --------------------------- |
+| `0` | No secrets found            |
+| `1` | Secrets detected            |
 | `2` | Configuration/runtime error |
 
 ---
@@ -194,7 +194,7 @@ ruff check keychase/ tests/
 - [ ] Secret verification (check if leaked keys are still active)
 - [ ] Entropy-based detection for unknown secret formats
 - [ ] Docker image (`docker run keychase scan .`)
-- [ ] Export to more formats (CSV, HTML)
+- [ ] SaaS dashboard (scan orgs, scheduled scans, PDF reports)
 
 ---
 
