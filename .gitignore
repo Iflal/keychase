@@ -60,3 +60,13 @@ ENV/
 
 # Keychase Specific
 .keychase/
+legacy/
+
+# Private / Internal Documentation
+MAINTAINER_GUIDE.md
+project_review.md
+
+# AI Assistant Artifacts
+implementation_plan.md
+task.md
+walkthrough.md

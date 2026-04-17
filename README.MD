@@ -194,7 +194,7 @@ ruff check keychase/ tests/
 - [ ] Secret verification (check if leaked keys are still active)
 - [ ] Entropy-based detection for unknown secret formats
 - [ ] Docker image (`docker run keychase scan .`)
-- [ ] SaaS dashboard (scan orgs, scheduled scans, PDF reports)
+- [ ] Export to more formats (CSV, HTML)
 
 ---
 
