@@ -145,6 +145,18 @@ legacy_config.py
 
 ## CI/CD Integration
 
+### Pre-Commit Hook
+
+Keychase natively supports `pre-commit`. To prevent secrets from ever being committed to your repository, add the following to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/Iflal/keychase
+    rev: v0.1.3  # Use the latest release tag
+    hooks:
+      - id: keychase
+```
+
 ### GitHub Actions
 
 ```yaml
@@ -190,7 +202,7 @@ ruff check keychase/ tests/
 
 ## Roadmap
 
-- [ ] Pre-commit hook integration (`keychase hook install`)
+- [x] Pre-commit hook integration (`keychase hook install`)
 - [ ] Secret verification (check if leaked keys are still active)
 - [ ] Entropy-based detection for unknown secret formats
 - [ ] Docker image (`docker run keychase scan .`)

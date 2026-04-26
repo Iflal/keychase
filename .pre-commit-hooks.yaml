@@ -1,0 +1,7 @@
+-   id: keychase
+    name: Keychase Secret Scanner
+    description: Scan for hardcoded secrets and API keys before they are committed.
+    entry: keychase scan --no-progress
+    language: python
+    types: [text]
+    exclude: ^(tests/fixtures/|\.git/|\.venv/)

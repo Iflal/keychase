@@ -142,6 +142,10 @@ class LocalScanner(BaseScanner):
 
     def _collect_files(self) -> list[Path]:
         """Walk the directory tree and collect scannable files."""
+        # If the target is a single file, just return it if it exists
+        if self.target_path.is_file():
+            return [self.target_path]
+
         # Load ignore patterns
         ignore_patterns: list[str] = []
         gitignore = self.target_path / ".gitignore"

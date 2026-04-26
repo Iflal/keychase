@@ -17,9 +17,10 @@ runner = CliRunner()
 
 class TestVersion:
     def test_version_command(self):
+        from keychase import __version__
         result = runner.invoke(app, ["version"])
         assert result.exit_code == 0
-        assert "0.1.0" in result.output
+        assert __version__ in result.output
 
 
 class TestDetectors:
@@ -86,9 +87,9 @@ class TestScan:
         assert len(data["runs"][0]["results"]) > 0
 
     def test_scan_nonexistent_path(self):
-        """Scanning a non-existent path should exit with code 2."""
+        """Scanning a non-existent path shouldn't crash (pre-commit friendly), exits 0."""
         result = runner.invoke(app, ["scan", "/nonexistent/path", "--no-progress"])
-        assert result.exit_code == 2
+        assert result.exit_code == 0
 
     def test_scan_github_without_token(self):
         """GitHub scan without token should exit with code 2."""

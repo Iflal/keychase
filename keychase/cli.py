@@ -37,9 +37,9 @@ console = Console()
 
 @app.command()
 def scan(
-    target: str = typer.Argument(
-        ".",
-        help="Path to scan (directory or 'owner/repo' for GitHub).",
+    targets: list[str] = typer.Argument(
+        None,
+        help="Paths to scan (directories, files, or 'owner/repo' for GitHub).",
     ),
     history: bool = typer.Option(
         False, "--history", "-H",
@@ -98,61 +98,72 @@ def scan(
             if not no_progress:
                 console.print(f"  📋 Loaded {len(custom)} custom patterns.")
 
+    if not targets:
+        targets = ["."]
+
     if not no_progress:
         _print_banner()
-        console.print(f"  🎯 Target: [bold]{target}[/bold]")
+        console.print(f"  🎯 Targets: [bold]{', '.join(targets)}[/bold]")
         console.print(f"  🔍 Detectors loaded: [bold]{registry.count}[/bold]")
         console.print()
 
     # ── Determine scan mode ───────────────────────────────────────
-    result = ScanResult()
+    result = ScanResult(target=", ".join(targets))
 
-    if is_github_target(target):
-        # GitHub API scan
-        gh_token = config.github_token
-        if not gh_token:
-            console.print("[bold red]Error:[/bold red] GitHub token is required for remote scans.")
-            console.print("  Set KEYCHASE_GITHUB_TOKEN or use --token.")
-            raise typer.Exit(code=2)
+    for target in targets:
+        if is_github_target(target):
+            # GitHub API scan
+            gh_token = config.github_token
+            if not gh_token:
+                console.print("[bold red]Error:[/bold red] GitHub token is required for remote scans.")
+                console.print("  Set KEYCHASE_GITHUB_TOKEN or use --token.")
+                raise typer.Exit(code=2)
 
-        from keychase.scanner.github_scanner import GitHubScanner
-        scanner = GitHubScanner(
-            repo=target,
-            token=gh_token,
-            registry=registry,
-            branch=branch,
-            show_progress=config.show_progress,
-        )
-        result = scanner.scan()
-
-    else:
-        # Local filesystem scan
-        target_path = Path(target).resolve()
-        if not target_path.exists():
-            console.print(f"[bold red]Error:[/bold red] Path not found: {target_path}")
-            raise typer.Exit(code=2)
-
-        from keychase.scanner.local_scanner import LocalScanner
-        local_scanner = LocalScanner(
-            target_path=target_path,
-            registry=registry,
-            config=config,
-            show_progress=config.show_progress,
-        )
-        result = local_scanner.scan()
-
-        # If --history, also scan git history and merge
-        if history:
-            from keychase.scanner.git_history_scanner import GitHistoryScanner
-            history_scanner = GitHistoryScanner(
-                repo_path=target_path,
+            from keychase.scanner.github_scanner import GitHubScanner
+            scanner = GitHubScanner(
+                repo=target,
+                token=gh_token,
                 registry=registry,
-                max_depth=config.history_depth,
                 branch=branch,
                 show_progress=config.show_progress,
             )
-            history_result = history_scanner.scan()
-            result.merge(history_result)
+            sub_result = scanner.scan()
+            result.merge(sub_result)
+
+        else:
+            # Local filesystem scan
+            target_path = Path(target).resolve()
+            if not target_path.exists():
+                # For pre-commit, some files might be passed that are already deleted but staged.
+                # We can just skip them rather than throwing a fatal error.
+                result.errors.append(f"Path not found: {target_path}")
+                continue
+
+            from keychase.scanner.local_scanner import LocalScanner
+            local_scanner = LocalScanner(
+                target_path=target_path,
+                registry=registry,
+                config=config,
+                show_progress=config.show_progress,
+            )
+            sub_result = local_scanner.scan()
+            result.merge(sub_result)
+
+            # If --history, also scan git history and merge
+            if history:
+                from keychase.scanner.git_history_scanner import GitHistoryScanner
+                history_scanner = GitHistoryScanner(
+                    repo_path=target_path,
+                    registry=registry,
+                    max_depth=config.history_depth,
+                    branch=branch,
+                    show_progress=config.show_progress,
+                )
+                try:
+                    hist_result = history_scanner.scan()
+                    result.merge(hist_result)
+                except ValueError as e:
+                    console.print(f"[bold yellow]Warning:[/bold yellow] {e}")
 
     # ── Output ────────────────────────────────────────────────────
     if format == "json":
